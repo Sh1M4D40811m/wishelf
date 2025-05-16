@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
+import 'package:wishelf/widgets/folder_colors.dart';
 
 class FolderEditDialog extends StatefulWidget {
   final Folder? editingFolder;
@@ -24,9 +25,11 @@ class _FolderEditDialogState extends State<FolderEditDialog> {
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.editingFolder?.title ?? '');
+    _titleController = TextEditingController(
+      text: widget.editingFolder?.title ?? '',
+    );
     _focusNode = FocusNode();
-    _selectedColor = widget.editingFolder?.colorHex ?? '0xFFFFFFFF';
+    _selectedColor = widget.editingFolder?.colorHex ?? FolderColors.values[0].hex;
     _isButtonEnabled = _titleController.text.trim().isNotEmpty;
 
     _titleController.addListener(() {
@@ -53,7 +56,7 @@ class _FolderEditDialogState extends State<FolderEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.editingFolder != null ? 'フォルダを編集' : 'フォルダの新規作成'),
+      title: Text(widget.editingFolder != null ? 'フォルダの編集' : 'フォルダの新規作成'),
       titleTextStyle: TextStyle(
         fontSize: 14,
         color: Theme.of(context).colorScheme.onSurface,
@@ -67,42 +70,39 @@ class _FolderEditDialogState extends State<FolderEditDialog> {
             decoration: InputDecoration(labelText: 'フォルダ名'),
           ),
           SizedBox(height: 16),
-          DropdownButtonFormField<String>(
-            value: _selectedColor,
+          DropdownButtonFormField<FolderColor>(
+            value: FolderColors.values.firstWhere(
+              (color) => color.hex == _selectedColor,
+              orElse: () => FolderColors.values[0],
+            ),
             decoration: InputDecoration(labelText: 'カラー'),
-            items: [
-              {'name': 'ミルク', 'hex': '0xFFFFFFFF'},
-              {'name': 'カフェオレ', 'hex': '0xFFECD4C2'},
-              {'name': 'ココア', 'hex': '0xFFDCBCB6'},
-              {'name': 'クリームソーダ', 'hex': '0xFFF4FFEA'},
-              {'name': 'ラムネ', 'hex': '0xFFE2FBFC'},
-              {'name': 'レモネード', 'hex': '0xFFFFFCC8'},
-            ].map((color) {
-              return DropdownMenuItem<String>(
-                value: color['hex'],
-                child: Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Color(int.parse(color['hex']!)),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.onSurface,
+            items:
+                FolderColors.values.map((color) {
+                  return DropdownMenuItem<FolderColor>(
+                    value: color,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: color.color,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: 8),
+                        Text(color.name),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                    Text(color['name']!),
-                  ],
-                ),
-              );
-            }).toList(),
+                  );
+                }).toList(),
             onChanged: (value) {
               if (value != null) {
                 setState(() {
-                  _selectedColor = value;
+                  _selectedColor = value.hex;
                 });
               }
             },
@@ -120,19 +120,21 @@ class _FolderEditDialogState extends State<FolderEditDialog> {
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
             textStyle: TextStyle(fontWeight: FontWeight.bold),
           ),
-          onPressed: _isButtonEnabled
-              ? () {
-                  final title = _titleController.text.trim();
-                  final folder = Folder(
-                    id: widget.editingFolder?.id ??
-                        DateTime.now().millisecondsSinceEpoch.toString(),
-                    title: title,
-                    colorHex: _selectedColor,
-                  );
-                  widget.onSubmit(folder);
-                  Navigator.pop(context);
-                }
-              : null,
+          onPressed:
+              _isButtonEnabled
+                  ? () {
+                    final title = _titleController.text.trim();
+                    final folder = Folder(
+                      id:
+                          widget.editingFolder?.id ??
+                          DateTime.now().millisecondsSinceEpoch.toString(),
+                      title: title,
+                      colorHex: _selectedColor,
+                    );
+                    widget.onSubmit(folder);
+                    Navigator.pop(context);
+                  }
+                  : null,
           child: Text(widget.editingFolder != null ? '保存' : '追加'),
         ),
       ],

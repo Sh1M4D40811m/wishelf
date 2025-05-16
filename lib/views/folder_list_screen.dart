@@ -31,7 +31,7 @@ class FolderListScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             elevation: 4,
-            color: Color(int.parse(folder.colorHex)),
+            color: Color(int.parse(folder.colorHex, radix: 16)),
             child: InkWell(
               borderRadius: BorderRadius.circular(8),
               onTap: () {
