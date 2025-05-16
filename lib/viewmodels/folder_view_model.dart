@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/folder.dart';
-import '../services/storage_service.dart';
+import 'package:wishelf/models/folder.dart';
+import 'package:wishelf/services/storage_service.dart';
 
 final class FolderViewModel extends ChangeNotifier {
   final StorageService _storage = StorageService();

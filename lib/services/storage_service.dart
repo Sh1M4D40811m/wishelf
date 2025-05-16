@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import '../models/folder.dart';
+import 'package:wishelf/models/folder.dart';
 
 final class StorageService {
   Future<File> _getLocalFile() async {
