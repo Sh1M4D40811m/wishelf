@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
-final class FolderColor {
-  final String name;
+enum FolderColor {
+  milk('ミルク', Color(0xFFFFFFFF)),
+  cafeAuLait('カフェオレ', Color(0xFFECD4C2)),
+  cocoa('ココア', Color(0xFFDCBCB6)),
+  creamSoda('クリームソーダ', Color(0xFFF4FFEA)),
+  ramune('ラムネ', Color(0xFFE2FBFC)),
+  lemonade('レモネード', Color(0xFFFFFCC8));
+
+  final String label;
   final Color color;
 
-  const FolderColor(this.name, this.color);
+  const FolderColor(this.label, this.color);
 
-  String get hex =>
-      color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
-}
+  String get hex => color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
 
-final class FolderColors {
-  static const List<FolderColor> values = [
-    FolderColor('ミルク', Color(0xFFFFFFFF)),
-    FolderColor('カフェオレ', Color(0xFFECD4C2)),
-    FolderColor('ココア', Color(0xFFDCBCB6)),
-    FolderColor('クリームソーダ', Color(0xFFF4FFEA)),
-    FolderColor('ラムネ', Color(0xFFE2FBFC)),
-    FolderColor('レモネード', Color(0xFFFFFCC8)),
-  ];
+  static fromHex(String hex) {
+    return values.firstWhere(
+      (color) => color.hex == hex,
+      orElse: () => milk,
+    );
+  }
 }

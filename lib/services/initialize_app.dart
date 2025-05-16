@@ -11,7 +11,7 @@ Future<void> initializeApp() async {
     final defaultFolder = Folder(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: 'リスト',
-      colorHex: FolderColors.values[0].hex,
+      colorHex: FolderColor.milk.hex,
     );
 
     final storage = StorageService();

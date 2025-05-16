@@ -29,8 +29,7 @@ final class _FolderEditDialogState extends State<FolderEditDialog> {
       text: widget.editingFolder?.title ?? '',
     );
     _focusNode = FocusNode();
-    _selectedColor =
-        widget.editingFolder?.colorHex ?? FolderColors.values[0].hex;
+    _selectedColor = widget.editingFolder?.colorHex ?? FolderColor.milk.hex;
     _isButtonEnabled = _titleController.text.trim().isNotEmpty;
 
     _titleController.addListener(_validateInput);
@@ -116,13 +115,10 @@ final class _FolderEditDialogState extends State<FolderEditDialog> {
 
   Widget _buildColorDropdown(BuildContext context) {
     return DropdownButtonFormField<FolderColor>(
-      value: FolderColors.values.firstWhere(
-        (color) => color.hex == _selectedColor,
-        orElse: () => FolderColors.values[0],
-      ),
+      value: FolderColor.fromHex(_selectedColor),
       decoration: InputDecoration(labelText: 'カラー'),
       items:
-          FolderColors.values.map((color) {
+          FolderColor.values.map((color) {
             return DropdownMenuItem<FolderColor>(
               value: color,
               child: Row(
@@ -139,7 +135,7 @@ final class _FolderEditDialogState extends State<FolderEditDialog> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  Text(color.name),
+                  Text(color.label),
                 ],
               ),
             );
