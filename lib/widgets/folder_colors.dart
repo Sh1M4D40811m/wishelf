@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FolderColor {
+final class FolderColor {
   final String name;
   final Color color;
 
@@ -10,7 +10,7 @@ class FolderColor {
       color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
 }
 
-class FolderColors {
+final class FolderColors {
   static const List<FolderColor> values = [
     FolderColor('ミルク', Color(0xFFFFFFFF)),
     FolderColor('カフェオレ', Color(0xFFECD4C2)),

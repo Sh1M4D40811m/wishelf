@@ -1,6 +1,6 @@
 import 'link.dart';
 
-class Folder {
+final class Folder {
   String id;
   String title;
   String colorHex;

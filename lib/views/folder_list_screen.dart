@@ -6,7 +6,7 @@ import 'package:wishelf/widgets/dialog/confirm_dialog.dart';
 import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
 
 // TODO: リファクタ・初回起動時デフォルトフォルダを作成しておく
-class FolderListScreen extends StatelessWidget {
+final class FolderListScreen extends StatelessWidget {
   const FolderListScreen({super.key});
 
   @override

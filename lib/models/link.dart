@@ -1,5 +1,5 @@
 // FIXME: 仮実装。imageurlは使わずにurlからサムネイル取得できるか検証する
-class Link {
+final class Link {
   String title;
   String url;
   String imageUrl;

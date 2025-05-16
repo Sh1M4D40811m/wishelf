@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../models/folder.dart';
 
-class StorageService {
+final class StorageService {
   Future<File> _getLocalFile() async {
     final dir = await getApplicationDocumentsDirectory();
     return File('${dir.path}/wishelf.json');

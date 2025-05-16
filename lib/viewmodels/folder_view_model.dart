@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/folder.dart';
 import '../services/storage_service.dart';
 
-class FolderViewModel extends ChangeNotifier {
+final class FolderViewModel extends ChangeNotifier {
   final StorageService _storage = StorageService();
   List<Folder> _folders = [];
   List<Folder> get folders => _folders;

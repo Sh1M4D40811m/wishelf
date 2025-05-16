@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/widgets/folder_colors.dart';
 
-class FolderEditDialog extends StatefulWidget {
+final class FolderEditDialog extends StatefulWidget {
   final Folder? editingFolder;
   final void Function(Folder folder) onSubmit;
 
@@ -16,7 +16,7 @@ class FolderEditDialog extends StatefulWidget {
   State<FolderEditDialog> createState() => _FolderEditDialogState();
 }
 
-class _FolderEditDialogState extends State<FolderEditDialog> {
+final class _FolderEditDialogState extends State<FolderEditDialog> {
   late TextEditingController _titleController;
   late FocusNode _focusNode;
   late String _selectedColor;
