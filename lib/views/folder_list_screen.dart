@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wishelf/viewmodels/folder_view_model.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/widgets/dialog/confirm_dialog.dart';
-import 'package:wishelf/widgets/dialog/foler_edit_dialog.dart';
+import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
 
 // TODO: リファクタ・初回起動時デフォルトフォルダを作成しておく
 class FolderListScreen extends StatelessWidget {

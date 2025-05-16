@@ -6,7 +6,8 @@ class FolderColor {
 
   const FolderColor(this.name, this.color);
 
-  String get hex => color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
+  String get hex =>
+      color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
 }
 
 class FolderColors {
