@@ -1,24 +1,43 @@
-// FIXME: 仮実装。imageurlは使わずにurlからサムネイル取得できるか検証する
-final class Link {
-  String title;
-  String url;
-  String imageUrl;
+import 'package:metadata_fetch/metadata_fetch.dart';
 
-  Link({
-    required this.title,
+final class LinkItem {
+  String id;
+  String url;
+  String title;
+  String? description;
+  String? imageUrl;
+
+  LinkItem({
+    required this.id,
     required this.url,
+    required this.title,
+    this.description,
     this.imageUrl = '',
   });
 
   Map<String, dynamic> toJson() => {
-    'title': title,
+    'id': id,
     'url': url,
+    'title': title,
+    'description': description,
     'imageUrl': imageUrl,
   };
 
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-    title: json['title'],
+  factory LinkItem.fromMetadata(String url, Metadata data) {
+    return LinkItem(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      url: url,
+      title: data.title ?? '無題',
+      description: data.description,
+      imageUrl: data.image,
+    );
+  }
+
+  factory LinkItem.fromJson(Map<String, dynamic> json) => LinkItem(
+    id: json['id'],
     url: json['url'],
+    title: json['title'],
+    description: json['description'],
     imageUrl: json['imageUrl'] ?? '',
   );
 }

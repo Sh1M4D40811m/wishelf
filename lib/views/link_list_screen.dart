@@ -60,14 +60,14 @@ final class LinkListScreen extends StatelessWidget {
       spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(Icons.link),
+        Icon(Icons.link), // リンク画像
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Link ${index + 1}",
+                "リンクタイトル",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -76,7 +76,7 @@ final class LinkListScreen extends StatelessWidget {
                 maxLines: 1,
               ),
               Text(
-                "https://example.com/${index + 1}",
+                "リンク説明",
                 style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context).colorScheme.onSurface,

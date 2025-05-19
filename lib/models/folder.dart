@@ -4,7 +4,7 @@ final class Folder {
   String id;
   String title;
   String colorHex;
-  List<Link> links;
+  List<LinkItem> links;
 
   Folder({
     required this.id,
@@ -24,6 +24,6 @@ final class Folder {
     id: json['id'],
     title: json['title'],
     colorHex: json['colorHex'],
-    links: (json['links'] as List).map((e) => Link.fromJson(e)).toList(),
+    links: (json['links'] as List).map((e) => LinkItem.fromJson(e)).toList(),
   );
 }
