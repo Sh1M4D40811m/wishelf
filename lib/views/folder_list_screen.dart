@@ -4,6 +4,7 @@ import 'package:wishelf/viewmodels/folder_view_model.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/widgets/dialog/confirm_dialog.dart';
 import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
+import 'package:wishelf/views/link_list_screen.dart';
 
 // TODO: リファクタ・初回起動時デフォルトフォルダを作成しておく
 final class FolderListScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ final class FolderListScreen extends StatelessWidget {
     final folderVM = Provider.of<FolderViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("WiShelf")),
+      appBar: AppBar(centerTitle: true, title: Text("WiShelf")),
       body: GridView.builder(
         padding: EdgeInsets.all(16),
         itemCount: folderVM.folders.length,
@@ -35,7 +36,11 @@ final class FolderListScreen extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(8),
               onTap: () {
-                // TODO: Navigate to folder details
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => LinkListScreen(folder: folder),
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
