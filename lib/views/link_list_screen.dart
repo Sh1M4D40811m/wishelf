@@ -46,7 +46,7 @@ final class LinkListScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             onTap: () {},
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
               child: _buildCardContents(context, index),
             ),
           ),
