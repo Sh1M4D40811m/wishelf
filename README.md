@@ -9,4 +9,5 @@
 - リンク一覧画面
 
 # 使用技術
-- Flutter
+- Flutter/Dart
+- ChatGPT/GoogleAIStudio/Copilot
