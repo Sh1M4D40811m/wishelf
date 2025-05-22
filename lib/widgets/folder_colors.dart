@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum FolderColor {
   milk('ミルク', Color(0xFFFFFFFF)),
-  cafeAuLait('カフェオレ', Color(0xFFECD4C2)),
+  cafeAuLait('カフェオレ', Color(0xFFF5EBE0)),
   cocoa('ココア', Color(0xFFDCBCB6)),
   creamSoda('クリームソーダ', Color(0xFFF4FFEA)),
   ramune('ラムネ', Color(0xFFE2FBFC)),
