@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
+import 'package:wishelf/views/link_edit_screen.dart';
 
 final class LinkListScreen extends StatelessWidget {
   final Folder folder;
@@ -24,7 +25,21 @@ final class LinkListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: add link action
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder:
+                  (context) => LinkEditScreen(
+                    initialItem: null,
+                    onSubmit: (
+                      url,
+                      title,
+                      folderId,
+                    ) {},
+                    folder: folder,
+                  ),
+              fullscreenDialog: true,
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),
@@ -37,7 +52,7 @@ final class LinkListScreen extends StatelessWidget {
       child: SizedBox(
         height: 120,
         child: Card(
-          color: Color(int.parse(folder.colorHex, radix: 16)),
+          color: Theme.of(context).cardColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
