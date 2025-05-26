@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/services/initialize_app.dart';
-import 'viewmodels/folder_view_model.dart';
+import 'viewmodels/folder_edit_view_model.dart';
 import 'package:wishelf/views/folder_list_screen.dart';
 
 void main() async {
@@ -9,7 +9,7 @@ void main() async {
   await initializeApp();
   runApp(
     ChangeNotifierProvider(
-      create: (_) => FolderViewModel()..loadFolders(),
+      create: (_) => FolderEditViewModel()..loadFolders(),
       child: MyApp(),
     ),
   );

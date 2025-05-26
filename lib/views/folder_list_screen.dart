@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wishelf/viewmodels/folder_view_model.dart';
+import 'package:wishelf/viewmodels/folder_edit_view_model.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/widgets/dialog/confirm_dialog.dart';
 import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
 import 'package:wishelf/views/link_list_screen.dart';
 
-// TODO: リファクタ・初回起動時デフォルトフォルダを作成しておく
 final class FolderListScreen extends StatelessWidget {
   const FolderListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final folderVM = Provider.of<FolderViewModel>(context);
+    final folderVM = Provider.of<FolderEditViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("WiShelf")),
@@ -158,7 +157,7 @@ final class FolderListScreen extends StatelessWidget {
 
   void _showFolderEditDialog(
     BuildContext context,
-    FolderViewModel viewModel, {
+    FolderEditViewModel viewModel, {
     Folder? editingFolder,
   }) {
     showDialog(

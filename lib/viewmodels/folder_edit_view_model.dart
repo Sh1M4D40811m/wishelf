@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/services/storage_service.dart';
 
-final class FolderViewModel extends ChangeNotifier {
+final class FolderEditViewModel extends ChangeNotifier {
   final StorageService _storage = StorageService();
   List<Folder> _folders = [];
   List<Folder> get folders => _folders;
