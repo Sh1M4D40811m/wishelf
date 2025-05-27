@@ -12,14 +12,11 @@ import 'package:wishelf/viewmodels/link_edit_view_model.dart';
 
 final class LinkEditScreen extends StatefulWidget {
   final LinkItem? initialItem;
-  final void Function(String url, String title, String? selectedFolderId)
-  onSubmit;
   final Folder folder;
 
   const LinkEditScreen({
     super.key,
     required this.initialItem,
-    required this.onSubmit,
     required this.folder,
   });
 

@@ -40,7 +40,6 @@ final class LinkListScreen extends StatelessWidget {
                       value: vm,
                       child: LinkEditScreen(
                         initialItem: null,
-                        onSubmit: (url, title, folderId) {},
                         folder: updatedFolder,
                       ),
                     ),
@@ -55,42 +54,4 @@ final class LinkListScreen extends StatelessWidget {
       ),
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(centerTitle: false, title: Text(folder.title)),
-  //     body: Column(
-  //       children: [
-  //         Expanded(
-  //           child: ListView.builder(
-  //             padding: const EdgeInsets.all(16),
-  //             itemCount: folder.links.length,
-  //             itemBuilder: (context, index) {
-  //               return LinkCard(
-  //                 item: folder.links[index],
-  //                 status: LinkCardStatus.normal,
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //     floatingActionButton: FloatingActionButton(
-  //       onPressed: () {
-  //         Navigator.of(context).push(
-  //           MaterialPageRoute(
-  //             builder:
-  //                 (context) => LinkEditScreen(
-  //                   initialItem: null,
-  //                   onSubmit: (url, title, folderId) {},
-  //                   folder: folder,
-  //                 ),
-  //             fullscreenDialog: true,
-  //           ),
-  //         );
-  //       },
-  //       child: Icon(Icons.add),
-  //     ),
-  //   );
-  // }
 }
