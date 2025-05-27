@@ -33,7 +33,6 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
   bool _isButtonEnabled = false;
   String? _selectedFolderId;
   List<Folder> _folders = [];
-
   Metadata? _fetchedMetadata;
   bool _isFetchingMetadata = false;
   String? _urlErrorText;
@@ -56,9 +55,6 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _urlFocusNode.requestFocus();
-      if (widget.initialItem?.imageUrl != null && _urlErrorText == null) {
-        _fetchMetadata(widget.initialItem!.imageUrl!);
-      }
     });
 
     _loadFolders();
@@ -103,7 +99,6 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
       });
     }
     _updateButtonState();
-    // タイトルフィールドのフォーカスが外れたときに再描画(バツボタンの表示)
     if (mounted) {
       setState(() {});
     }
@@ -154,7 +149,9 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
       if (data != null) {
         setState(() {
           _fetchedMetadata = data;
-          if (data.title != null && data.title!.isNotEmpty) {
+          if (data.title != null &&
+              data.title!.isNotEmpty &&
+              _titleController.text.trim().isEmpty) {
             _titleController.text = data.title!;
           } else {
             _titleController.clear();
@@ -210,14 +207,22 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
       imageUrl: _fetchedMetadata?.image,
       description: _fetchedMetadata?.description,
     );
-    vm.addLinkToFolder(_selectedFolderId!, link);
+    if (widget.initialItem != null) {
+      link.id = widget.initialItem!.id;
+      vm.updateLinkInFolder(_selectedFolderId!, link);
+    } else {
+      vm.addLinkToFolder(_selectedFolderId!, link);
+    }
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: false, title: Text('リンクを追加')),
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(widget.initialItem != null ? 'リンクを編集' : 'リンクを追加'),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -258,8 +263,11 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isButtonEnabled ? _submitLink : null,
-        icon: Icon(Icons.add),
-        label: Text('追加', style: TextStyle(fontWeight: FontWeight.bold)),
+        icon: Icon(widget.initialItem != null ? Icons.save : Icons.add),
+        label: Text(
+          widget.initialItem != null ? '更新' : '追加',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor:
             _isButtonEnabled
                 ? Theme.of(context).colorScheme.primary

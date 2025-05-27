@@ -32,18 +32,18 @@ final class LinkListScreen extends StatelessWidget {
                   status: LinkCardStatus.normal,
                   onTapMenu: (type) {
                     if (type == LinkCardMenuType.edit) {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (_) => ChangeNotifierProvider.value(
-                      //       value: vm,
-                      //       child: LinkEditScreen(
-                      //         initialItem: updatedFolder.links[index],
-                      //         folder: updatedFolder,
-                      //       ),
-                      //     ),
-                      //     fullscreenDialog: true,
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ChangeNotifierProvider.value(
+                            value: vm,
+                            child: LinkEditScreen(
+                              initialItem: updatedFolder.links[index],
+                              folder: updatedFolder,
+                            ),
+                          ),
+                          fullscreenDialog: true,
+                        ),
+                      );
                     } else if (type == LinkCardMenuType.delete) {
                       _showDeleteConfirmDialog(
                         context,
