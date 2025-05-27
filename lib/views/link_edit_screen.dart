@@ -149,10 +149,10 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
       if (data != null) {
         setState(() {
           _fetchedMetadata = data;
-          if (data.title != null &&
-              data.title!.isNotEmpty &&
-              _titleController.text.trim().isEmpty) {
-            _titleController.text = data.title!;
+          if (data.title != null && data.title!.isNotEmpty) {
+            if (_titleController.text.trim().isEmpty) {
+              _titleController.text = data.title!;
+            }
           } else {
             _titleController.clear();
           }

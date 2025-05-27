@@ -24,7 +24,7 @@ final class LinkListScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(centerTitle: false, title: Text(folder.title)),
             body: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
               itemCount: updatedFolder.links.length,
               itemBuilder: (context, index) {
                 return LinkCard(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum LinkCardStatus { normal, selected, preview }
 
@@ -38,7 +39,19 @@ class _LinkCardState extends State<LinkCard> {
           elevation: 4,
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
-            onTap: () {},
+            onTap: () async {
+              final url = Uri.tryParse(widget.item.url);
+              print("Parsed URL: $url");
+              print("URL Scheme: ${url?.scheme}");
+              if (url != null && await canLaunchUrl(url)) {
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              } else {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('リンクを開けませんでした')));
+              }
+            },
             child: _buildCardContents(context),
           ),
         ),
