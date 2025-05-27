@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/link.dart';
-import 'package:wishelf/widgets/folder_colors.dart';
 
 enum LinkCardStatus { normal, selected, preview }
 
@@ -42,7 +41,10 @@ final class LinkCard extends StatelessWidget {
         ],
         Expanded(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(8, 16, 16, 16),
+            padding: EdgeInsets.only(
+              left: 8,
+              right: status == LinkCardStatus.normal ? 0 : 16,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +114,6 @@ final class LinkCard extends StatelessWidget {
         },
       ),
     );
-    // return Image.network('https://placehold.jp/120x120.png');
   }
 
   Widget _buildMoreMenu(BuildContext context) {

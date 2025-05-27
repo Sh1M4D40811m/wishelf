@@ -7,6 +7,8 @@ import 'package:wishelf/widgets/folder_colors.dart';
 import 'package:wishelf/widgets/link_card.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:wishelf/viewmodels/link_edit_view_model.dart';
 
 final class LinkEditScreen extends StatefulWidget {
   final LinkItem? initialItem;
@@ -43,9 +45,7 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
   @override
   void initState() {
     super.initState();
-    _urlController = TextEditingController(
-      text: widget.initialItem?.imageUrl ?? '',
-    );
+    _urlController = TextEditingController(text: widget.initialItem?.url ?? '');
     _titleController = TextEditingController(
       text: widget.initialItem?.title ?? '',
     );
@@ -131,7 +131,6 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
   }
 
   Future<void> _fetchMetadata(String url) async {
-    print('call _fetchMetadata');
     final trimmedUrl = url.trim();
 
     if (trimmedUrl.isEmpty) {
@@ -206,17 +205,15 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
       return;
     }
 
-    String finalTitle = _titleController.text.trim();
-    if (finalTitle.isEmpty) {
-      if (_fetchedMetadata?.title != null &&
-          _fetchedMetadata!.title!.isNotEmpty) {
-        finalTitle = _fetchedMetadata!.title!;
-      } else {
-        finalTitle = _urlController.text.trim();
-      }
-    }
-
-    widget.onSubmit(_urlController.text.trim(), finalTitle, _selectedFolderId);
+    final vm = Provider.of<LinkEditViewModel>(context, listen: false);
+    final link = LinkItem(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      url: _urlController.text.trim(),
+      title: _titleController.text.trim(),
+      imageUrl: _fetchedMetadata?.image,
+      description: _fetchedMetadata?.description,
+    );
+    vm.addLinkToFolder(_selectedFolderId!, link);
     Navigator.of(context).pop();
   }
 

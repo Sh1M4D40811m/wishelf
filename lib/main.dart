@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/services/initialize_app.dart';
 import 'viewmodels/folder_edit_view_model.dart';
+import 'viewmodels/link_edit_view_model.dart';
 import 'package:wishelf/views/folder_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeApp();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => FolderEditViewModel()..loadFolders(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LinkEditViewModel()..loadFolders()),
+        ChangeNotifierProvider(create: (_) => FolderEditViewModel()..loadFolders()),
+      ],
       child: MyApp(),
     ),
   );
@@ -26,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         hintColor: const Color(0xFFB7A9AA),
-        cardColor: const Color(0xFFFFFFFF),
+        cardColor: const Color(0xFFFBF7F3),
         colorScheme: ColorScheme(
           brightness: Brightness.light,
           primary: const Color(0xFF624A2E),

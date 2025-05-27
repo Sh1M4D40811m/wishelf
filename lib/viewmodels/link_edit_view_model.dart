@@ -6,7 +6,14 @@ import 'package:wishelf/services/storage_service.dart';
 final class LinkEditViewModel extends ChangeNotifier {
   final StorageService _storage = StorageService();
   final List<Folder> _folders = [];
-  List<Folder> get folders => _folders;
+  List<Folder> get folders => List.unmodifiable(_folders);
+
+  Future<void> loadFolders() async {
+    final loaded = await _storage.loadFolders();
+    _folders.clear();
+    _folders.addAll(loaded);
+    notifyListeners();
+  }
 
   void addLinkToFolder(String folderId, LinkItem link) {
     final index = _folders.indexWhere((f) => f.id == folderId);
