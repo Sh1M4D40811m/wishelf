@@ -23,4 +23,13 @@ final class LinkEditViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void deleteLinkFromFolder(String folderId, String linkId) {
+    final index = _folders.indexWhere((f) => f.id == folderId);
+    if (index != -1) {
+      _folders[index].links.removeWhere((link) => link.id == linkId);
+      _storage.saveFolders(_folders);
+      notifyListeners();
+    }
+  }
 }

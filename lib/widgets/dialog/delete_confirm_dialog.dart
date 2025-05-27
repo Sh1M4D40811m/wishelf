@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-final class ConfirmDialog extends StatelessWidget {
+final class DeleteConfirmDialog extends StatelessWidget {
   final String title;
   final String message;
   final String confirmText;
   final String cancelText;
   final VoidCallback onConfirm;
 
-  const ConfirmDialog({
+  const DeleteConfirmDialog({
     super.key,
     required this.title,
     required this.message,

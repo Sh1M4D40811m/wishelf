@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/viewmodels/folder_edit_view_model.dart';
 import 'package:wishelf/models/folder.dart';
-import 'package:wishelf/widgets/dialog/confirm_dialog.dart';
+import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';
 import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
 import 'package:wishelf/views/link_list_screen.dart';
 
@@ -76,7 +76,7 @@ final class FolderListScreen extends StatelessWidget {
                             editingFolder: folder,
                           );
                         } else if (value == 'delete') {
-                          _showConfirmDialog(
+                          _showDeleteConfirmDialog(
                             context,
                             onConfirm: () {
                               folderVM.deleteFolder(folder.id);
@@ -137,16 +137,16 @@ final class FolderListScreen extends StatelessWidget {
     );
   }
 
-  void _showConfirmDialog(
+  void _showDeleteConfirmDialog(
     BuildContext context, {
     required VoidCallback onConfirm,
   }) {
     showDialog(
       context: context,
       builder: (context) {
-        return ConfirmDialog(
+        return DeleteConfirmDialog(
           title: 'フォルダの削除',
-          message: 'フォルダ内のリンクも全て削除されます。\n削除した場合、復元できません',
+          message: 'フォルダ内のリンクも全て削除されます。\n削除した場合、復元できません。',
           confirmText: '削除',
           cancelText: 'キャンセル',
           onConfirm: onConfirm,

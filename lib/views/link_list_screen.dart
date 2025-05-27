@@ -4,12 +4,13 @@ import 'package:wishelf/views/link_edit_screen.dart';
 import 'package:wishelf/widgets/link_card.dart';
 import 'package:wishelf/viewmodels/link_edit_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';
 
 final class LinkListScreen extends StatelessWidget {
   final Folder folder;
   const LinkListScreen({super.key, required this.folder});
 
-@override
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LinkEditViewModel>(
       create: (_) => LinkEditViewModel()..loadFolders(),
@@ -29,6 +30,32 @@ final class LinkListScreen extends StatelessWidget {
                 return LinkCard(
                   item: updatedFolder.links[index],
                   status: LinkCardStatus.normal,
+                  onTapMenu: (type) {
+                    if (type == LinkCardMenuType.edit) {
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (_) => ChangeNotifierProvider.value(
+                      //       value: vm,
+                      //       child: LinkEditScreen(
+                      //         initialItem: updatedFolder.links[index],
+                      //         folder: updatedFolder,
+                      //       ),
+                      //     ),
+                      //     fullscreenDialog: true,
+                      //   ),
+                      // );
+                    } else if (type == LinkCardMenuType.delete) {
+                      _showDeleteConfirmDialog(
+                        context,
+                        onConfirm: () {
+                          vm.deleteLinkFromFolder(
+                            folder.id,
+                            updatedFolder.links[index].id,
+                          );
+                        },
+                      );
+                    }
+                  },
                 );
               },
             ),
@@ -36,13 +63,14 @@ final class LinkListScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider.value(
-                      value: vm,
-                      child: LinkEditScreen(
-                        initialItem: null,
-                        folder: updatedFolder,
-                      ),
-                    ),
+                    builder:
+                        (_) => ChangeNotifierProvider.value(
+                          value: vm,
+                          child: LinkEditScreen(
+                            initialItem: null,
+                            folder: updatedFolder,
+                          ),
+                        ),
                     fullscreenDialog: true,
                   ),
                 );
@@ -52,6 +80,24 @@ final class LinkListScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void _showDeleteConfirmDialog(
+    BuildContext context, {
+    required VoidCallback onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DeleteConfirmDialog(
+          title: 'リンクの削除',
+          message: '削除した場合、復元できません。\n本当に削除しますか？',
+          confirmText: '削除',
+          cancelText: 'キャンセル',
+          onConfirm: onConfirm,
+        );
+      },
     );
   }
 }

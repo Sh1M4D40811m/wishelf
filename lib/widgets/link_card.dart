@@ -3,10 +3,25 @@ import 'package:wishelf/models/link.dart';
 
 enum LinkCardStatus { normal, selected, preview }
 
-final class LinkCard extends StatelessWidget {
+enum LinkCardMenuType { edit, delete }
+
+class LinkCard extends StatefulWidget {
   final LinkItem item;
   final LinkCardStatus status;
-  const LinkCard({super.key, required this.item, required this.status});
+  final void Function(LinkCardMenuType type)? onTapMenu;
+  const LinkCard({
+    super.key,
+    required this.item,
+    required this.status,
+    this.onTapMenu,
+  });
+
+  @override
+  State<LinkCard> createState() => _LinkCardState();
+}
+
+class _LinkCardState extends State<LinkCard> {
+  bool _hasImageError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +48,29 @@ final class LinkCard extends StatelessWidget {
 
   Widget _buildCardContents(BuildContext context) {
     return Row(
-      spacing: 8,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (item.imageUrl != null && item.imageUrl!.isNotEmpty) ...[
-          _buildThubmnail(context, item.imageUrl!),
-        ],
+        if (widget.item.imageUrl != null &&
+            widget.item.imageUrl!.isNotEmpty &&
+            !_hasImageError)
+          _buildThumbnail(context, widget.item.imageUrl!),
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(
-              left: 8,
-              right: status == LinkCardStatus.normal ? 0 : 16,
+              left:
+                  widget.item.imageUrl != null &&
+                          widget.item.imageUrl!.isNotEmpty &&
+                          !_hasImageError
+                      ? 8
+                      : 16,
+              right: widget.status == LinkCardStatus.normal ? 0 : 16,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  widget.item.title,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -59,10 +79,10 @@ final class LinkCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                if (item.description != null &&
-                    item.description!.isNotEmpty) ...[
+                if (widget.item.description != null &&
+                    widget.item.description!.isNotEmpty)
                   Text(
-                    item.description!,
+                    widget.item.description!,
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -70,17 +90,16 @@ final class LinkCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ],
               ],
             ),
           ),
         ),
-        if (status == LinkCardStatus.normal) ...[_buildMoreMenu(context)],
+        if (widget.status == LinkCardStatus.normal) _buildMoreMenu(context),
       ],
     );
   }
 
-  Widget _buildThubmnail(BuildContext context, String imageUrl) {
+  Widget _buildThumbnail(BuildContext context, String imageUrl) {
     return SizedBox(
       height: 120,
       width: 120,
@@ -100,17 +119,14 @@ final class LinkCard extends StatelessWidget {
           );
         },
         errorBuilder: (context, error, stackTrace) {
-          return Container(
-            height: 150,
-            color: Colors.grey[200],
-            child: Center(
-              child: Icon(
-                Icons.broken_image_outlined,
-                color: Colors.grey[500],
-                size: 48,
-              ),
-            ),
-          );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                _hasImageError = true;
+              });
+            }
+          });
+          return const SizedBox.shrink(); // 空のWidget（表示しない）
         },
       ),
     );
@@ -124,9 +140,9 @@ final class LinkCard extends StatelessWidget {
       ),
       onSelected: (value) {
         if (value == 'edit') {
-          // TODO: add edit action
+          widget.onTapMenu?.call(LinkCardMenuType.edit);
         } else if (value == 'delete') {
-          // TODO: add delete action
+          widget.onTapMenu?.call(LinkCardMenuType.delete);
         }
       },
       itemBuilder:
@@ -150,10 +166,15 @@ final class LinkCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.delete,
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Theme.of(context).colorScheme.error,
                   ),
                   SizedBox(width: 8),
-                  Text('削除'),
+                  Text(
+                    '削除',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 ],
               ),
             ),
