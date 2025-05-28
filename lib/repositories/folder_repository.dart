@@ -37,24 +37,24 @@ class FolderRepository extends ChangeNotifier {
     save();
   }
 
-  void addLinkToFolder(String folderId, LinkItem link) {
+  Future<void> addLinkToFolder(String folderId, LinkItem link) async {
     final folder = _folders.firstWhere((f) => f.id == folderId, orElse: () => throw Exception("Folder not found"));
     folder.links.add(link);
-    save();
+    await save();
   }
 
-  void updateLinkInFolder(String folderId, LinkItem updatedLink) {
+  Future<void>  updateLinkInFolder(String folderId, LinkItem updatedLink) async {
     final folder = _folders.firstWhere((f) => f.id == folderId, orElse: () => throw Exception("Folder not found"));
     final index = folder.links.indexWhere((l) => l.id == updatedLink.id);
     if (index != -1) {
       folder.links[index] = updatedLink;
-      save();
+      await save();
     }
   }
 
-  void deleteLinkFromFolder(String folderId, String linkId) {
+  Future<void>  deleteLinkFromFolder(String folderId, String linkId) async {
     final folder = _folders.firstWhere((f) => f.id == folderId, orElse: () => throw Exception("Folder not found"));
     folder.links.removeWhere((l) => l.id == linkId);
-    save();
+    await save();
   }
 }

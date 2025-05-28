@@ -7,11 +7,21 @@ final class LinkEditViewModel extends ChangeNotifier {
 
   LinkEditViewModel(this.repository);
 
-  void addLink(String folderId, LinkItem link) =>
-      repository.addLinkToFolder(folderId, link);
-
-  void updateLink(String folderId, LinkItem link) =>
-      repository.updateLinkInFolder(folderId, link);
+  Future<void> saveLink({
+    required LinkItem link,
+    required String targetFolderId,
+    String? originalFolderId,
+  }) async {
+    if (originalFolderId == null) {
+      await repository.addLinkToFolder(targetFolderId, link);
+    } else if (originalFolderId == targetFolderId) {
+      await repository.updateLinkInFolder(targetFolderId, link);
+    } else {
+      await repository.deleteLinkFromFolder(originalFolderId, link.id);
+      await repository.addLinkToFolder(targetFolderId, link);
+    }
+    notifyListeners();
+  }
 
   void deleteLink(String folderId, String linkId) =>
       repository.deleteLinkFromFolder(folderId, linkId);

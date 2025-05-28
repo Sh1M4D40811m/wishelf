@@ -188,7 +188,7 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
     }
   }
 
-  void _submitLink() {
+  Future<void> _submitLink() async {
     if (!_isButtonEnabled ||
         _urlController.text.trim().isEmpty ||
         _urlErrorText != null) {
@@ -201,18 +201,19 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
 
     final vm = Provider.of<LinkEditViewModel>(context, listen: false);
     final link = LinkItem(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: widget.initialItem?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
       url: _urlController.text.trim(),
       title: _titleController.text.trim(),
       imageUrl: _fetchedMetadata?.image,
       description: _fetchedMetadata?.description,
     );
-    if (widget.initialItem != null) {
-      link.id = widget.initialItem!.id;
-      vm.updateLink(_selectedFolderId!, link);
-    } else {
-      vm.addLink(_selectedFolderId!, link);
-    }
+
+    await vm.saveLink(
+      link: link,
+      targetFolderId: _selectedFolderId!,
+      originalFolderId: widget.initialItem != null ? widget.folder.id : null,
+    );
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
