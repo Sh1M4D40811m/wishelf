@@ -3,7 +3,7 @@ import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/models/link.dart';
 import 'package:wishelf/services/storage_service.dart';
 
-class FolderRepository extends ChangeNotifier {
+final class FolderRepository extends ChangeNotifier {
   final _storage = StorageService();
   List<Folder> _folders = [];
   List<Folder> get folders => List.unmodifiable(_folders);
@@ -18,23 +18,23 @@ class FolderRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addFolder(Folder folder) {
+  Future<void> addFolder(Folder folder) async {
     _folders.add(folder);
-    save();
+    await save();
   }
 
-  void updateFolder(String id, String newTitle, String newColorHex) {
+  Future<void> updateFolder(String id, String newTitle, String newColorHex) async {
     final index = _folders.indexWhere((f) => f.id == id);
     if (index != -1) {
       _folders[index].title = newTitle;
       _folders[index].colorHex = newColorHex;
-      save();
+      await save();
     }
   }
 
-  void deleteFolder(String id) {
+  Future<void> deleteFolder(String id) async {
     _folders.removeWhere((f) => f.id == id);
-    save();
+    await save();
   }
 
   Future<void> addLinkToFolder(String folderId, LinkItem link) async {

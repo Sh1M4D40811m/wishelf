@@ -23,7 +23,6 @@ final class StorageService {
       final List<dynamic> decoded = jsonDecode(contents);
       return decoded.map((e) => Folder.fromJson(e)).toList();
     } catch (e) {
-      print('Error loading folders: $e');
       return [];
     }
   }

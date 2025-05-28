@@ -1,7 +1,7 @@
 import 'package:metadata_fetch/metadata_fetch.dart';
 
 final class LinkItem {
-  String id;
+  final String id;
   String url;
   String title;
   String? description;
@@ -12,7 +12,7 @@ final class LinkItem {
     required this.url,
     required this.title,
     this.description,
-    this.imageUrl = '',
+    this.imageUrl,
   });
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +38,6 @@ final class LinkItem {
     url: json['url'],
     title: json['title'],
     description: json['description'],
-    imageUrl: json['imageUrl'] ?? '',
+    imageUrl: json['imageUrl'],
   );
 }
