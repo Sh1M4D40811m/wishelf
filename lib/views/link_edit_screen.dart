@@ -209,9 +209,9 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
     );
     if (widget.initialItem != null) {
       link.id = widget.initialItem!.id;
-      vm.updateLinkInFolder(_selectedFolderId!, link);
+      vm.updateLink(_selectedFolderId!, link);
     } else {
-      vm.addLinkToFolder(_selectedFolderId!, link);
+      vm.addLink(_selectedFolderId!, link);
     }
     Navigator.of(context).pop();
   }
@@ -221,7 +221,7 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text(widget.initialItem != null ? 'リンクを編集' : 'リンクを追加'),
+        title: Text(widget.initialItem != null ? 'リンクの編集' : 'リンクの追加'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),

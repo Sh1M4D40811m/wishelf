@@ -1,7 +1,7 @@
 import 'link.dart';
 
 final class Folder {
-  String id;
+  final String id;
   String title;
   String colorHex;
   List<LinkItem> links;
@@ -10,8 +10,8 @@ final class Folder {
     required this.id,
     required this.title,
     required this.colorHex,
-    this.links = const [],
-  });
+    List<LinkItem>? links,
+  }) : links = links ?? [];
 
   Map<String, dynamic> toJson() => {
     'id': id,

@@ -5,6 +5,7 @@ import 'package:wishelf/widgets/link_card.dart';
 import 'package:wishelf/viewmodels/link_edit_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';
+import 'package:wishelf/repositories/folder_repository.dart';
 
 final class LinkListScreen extends StatelessWidget {
   final Folder folder;
@@ -12,11 +13,13 @@ final class LinkListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final folders = context.watch<FolderRepository>().folders;
+
     return ChangeNotifierProvider<LinkEditViewModel>(
-      create: (_) => LinkEditViewModel()..loadFolders(),
+      create: (_) => LinkEditViewModel(context.read<FolderRepository>()),
       child: Consumer<LinkEditViewModel>(
         builder: (context, vm, _) {
-          final updatedFolder = vm.folders.firstWhere(
+          final updatedFolder = folders.firstWhere(
             (f) => f.id == folder.id,
             orElse: () => folder,
           );
@@ -34,13 +37,14 @@ final class LinkListScreen extends StatelessWidget {
                     if (type == LinkCardMenuType.edit) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => ChangeNotifierProvider.value(
-                            value: vm,
-                            child: LinkEditScreen(
-                              initialItem: updatedFolder.links[index],
-                              folder: updatedFolder,
-                            ),
-                          ),
+                          builder:
+                              (_) => ChangeNotifierProvider.value(
+                                value: vm,
+                                child: LinkEditScreen(
+                                  initialItem: updatedFolder.links[index],
+                                  folder: updatedFolder,
+                                ),
+                              ),
                           fullscreenDialog: true,
                         ),
                       );
@@ -48,7 +52,7 @@ final class LinkListScreen extends StatelessWidget {
                       _showDeleteConfirmDialog(
                         context,
                         onConfirm: () {
-                          vm.deleteLinkFromFolder(
+                          vm.deleteLink(
                             folder.id,
                             updatedFolder.links[index].id,
                           );

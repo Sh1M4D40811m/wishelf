@@ -5,19 +5,21 @@ import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';
 import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
 import 'package:wishelf/views/link_list_screen.dart';
+import 'package:wishelf/repositories/folder_repository.dart';
 
 final class FolderListScreen extends StatelessWidget {
   const FolderListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final folderVM = Provider.of<FolderEditViewModel>(context);
+    final folders = context.watch<FolderRepository>().folders;
+    final vm = FolderEditViewModel(context.read<FolderRepository>());
 
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("WiShelf")),
       body: GridView.builder(
         padding: EdgeInsets.all(16),
-        itemCount: folderVM.folders.length,
+        itemCount: folders.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.8,
@@ -25,7 +27,7 @@ final class FolderListScreen extends StatelessWidget {
           mainAxisSpacing: 8,
         ),
         itemBuilder: (_, index) {
-          final folder = folderVM.folders[index];
+          final folder = folders[index];
           return Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -69,17 +71,17 @@ final class FolderListScreen extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                       onSelected: (value) {
-                        if (value == 'rename') {
+                        if (value == 'edit') {
                           _showFolderEditDialog(
                             context,
-                            folderVM,
+                            vm,
                             editingFolder: folder,
                           );
                         } else if (value == 'delete') {
                           _showDeleteConfirmDialog(
                             context,
                             onConfirm: () {
-                              folderVM.deleteFolder(folder.id);
+                              vm.deleteFolder(folder.id);
                             },
                           );
                         }
@@ -87,7 +89,7 @@ final class FolderListScreen extends StatelessWidget {
                       itemBuilder:
                           (BuildContext context) => [
                             PopupMenuItem<String>(
-                              value: 'rename',
+                              value: 'edit',
                               child: Row(
                                 children: [
                                   Icon(
@@ -96,7 +98,7 @@ final class FolderListScreen extends StatelessWidget {
                                         Theme.of(context).colorScheme.onSurface,
                                   ),
                                   SizedBox(width: 8),
-                                  Text('名前を変更'),
+                                  Text('フォルダの編集'),
                                 ],
                               ),
                             ),
@@ -130,7 +132,7 @@ final class FolderListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showFolderEditDialog(context, folderVM);
+          _showFolderEditDialog(context, vm);
         },
         child: Icon(Icons.create_new_folder_outlined),
       ),

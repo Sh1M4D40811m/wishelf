@@ -1,39 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
-import 'package:wishelf/services/storage_service.dart';
+import 'package:wishelf/repositories/folder_repository.dart';
 
 final class FolderEditViewModel extends ChangeNotifier {
-  final StorageService _storage = StorageService();
-  List<Folder> _folders = [];
-  List<Folder> get folders => _folders;
+  final FolderRepository repository;
 
-  Future<void> loadFolders() async {
-    _folders = await _storage.loadFolders();
-    notifyListeners();
-  }
+  FolderEditViewModel(this.repository);
 
-  void addFolder(Folder folder) {
-    _folders.add(folder);
-    _storage.saveFolders(_folders);
-    notifyListeners();
-  }
+  void addFolder(Folder folder) => repository.addFolder(folder);
 
-  void updateFolder(String id, String newTitle, String newColorHex) {
-    final index = folders.indexWhere((f) => f.id == id);
-    if (index != -1) {
-      folders[index] = Folder(
-        id: folders[index].id,
-        title: newTitle,
-        colorHex: newColorHex,
-      );
-      _storage.saveFolders(_folders);
-      notifyListeners();
-    }
-  }
+  void updateFolder(String id, String title, String color) =>
+      repository.updateFolder(id, title, color);
 
-  void deleteFolder(String id) {
-    _folders.removeWhere((folder) => folder.id == id);
-    _storage.saveFolders(_folders);
-    notifyListeners();
-  }
+  void deleteFolder(String id) => repository.deleteFolder(id);
 }

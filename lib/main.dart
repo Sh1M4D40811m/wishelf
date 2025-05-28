@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/services/initialize_app.dart';
-import 'viewmodels/folder_edit_view_model.dart';
-import 'viewmodels/link_edit_view_model.dart';
 import 'package:wishelf/views/folder_list_screen.dart';
+import 'repositories/folder_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeApp();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LinkEditViewModel()..loadFolders()),
-        ChangeNotifierProvider(create: (_) => FolderEditViewModel()..loadFolders()),
-      ],
+    ChangeNotifierProvider(
+      create: (_) => FolderRepository()..load(),
       child: MyApp(),
     ),
   );

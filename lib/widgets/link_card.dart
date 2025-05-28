@@ -169,7 +169,7 @@ class _LinkCardState extends State<LinkCard> {
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   SizedBox(width: 8),
-                  Text('リンクを編集'),
+                  Text('リンクの編集'),
                 ],
               ),
             ),

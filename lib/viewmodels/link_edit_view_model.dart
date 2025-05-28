@@ -1,48 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/models/link.dart';
-import 'package:wishelf/services/storage_service.dart';
+import 'package:wishelf/repositories/folder_repository.dart';
 
 final class LinkEditViewModel extends ChangeNotifier {
-  final StorageService _storage = StorageService();
-  final List<Folder> _folders = [];
-  List<Folder> get folders => List.unmodifiable(_folders);
+  final FolderRepository repository;
 
-  Future<void> loadFolders() async {
-    final loaded = await _storage.loadFolders();
-    _folders.clear();
-    _folders.addAll(loaded);
-    notifyListeners();
-  }
+  LinkEditViewModel(this.repository);
 
-  void addLinkToFolder(String folderId, LinkItem link) {
-    final index = _folders.indexWhere((f) => f.id == folderId);
-    if (index != -1) {
-      _folders[index].links.add(link);
-      _storage.saveFolders(_folders);
-      notifyListeners();
-    }
-  }
+  void addLink(String folderId, LinkItem link) =>
+      repository.addLinkToFolder(folderId, link);
 
-  void updateLinkInFolder(String folderId, LinkItem updatedLink) {
-    final folderIndex = _folders.indexWhere((f) => f.id == folderId);
-    if (folderIndex != -1) {
-      final linkIndex = _folders[folderIndex].links
-          .indexWhere((l) => l.id == updatedLink.id);
-      if (linkIndex != -1) {
-        _folders[folderIndex].links[linkIndex] = updatedLink;
-        _storage.saveFolders(_folders);
-        notifyListeners();
-      }
-    }
-  }
+  void updateLink(String folderId, LinkItem link) =>
+      repository.updateLinkInFolder(folderId, link);
 
-  void deleteLinkFromFolder(String folderId, String linkId) {
-    final index = _folders.indexWhere((f) => f.id == folderId);
-    if (index != -1) {
-      _folders[index].links.removeWhere((link) => link.id == linkId);
-      _storage.saveFolders(_folders);
-      notifyListeners();
-    }
-  }
+  void deleteLink(String folderId, String linkId) =>
+      repository.deleteLinkFromFolder(folderId, linkId);
 }
