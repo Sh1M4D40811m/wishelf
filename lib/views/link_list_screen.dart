@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/views/link_edit_screen.dart';
-import 'package:wishelf/widgets/link_card.dart';
+import 'package:wishelf/widgets/card/link_card.dart';
 import 'package:wishelf/viewmodels/link_edit_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';

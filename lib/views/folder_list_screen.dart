@@ -6,6 +6,7 @@ import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';
 import 'package:wishelf/widgets/dialog/folder_edit_dialog.dart';
 import 'package:wishelf/views/link_list_screen.dart';
 import 'package:wishelf/repositories/folder_repository.dart';
+import 'package:wishelf/widgets/card/folder_card.dart';
 
 final class FolderListScreen extends StatelessWidget {
   const FolderListScreen({super.key});
@@ -28,105 +29,26 @@ final class FolderListScreen extends StatelessWidget {
         ),
         itemBuilder: (_, index) {
           final folder = folders[index];
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 4,
-            color: Color(int.parse(folder.colorHex, radix: 16)),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => LinkListScreen(folder: folder),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.folder,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        folder.title,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(width: 4),
-                    PopupMenuButton<String>(
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      onSelected: (value) {
-                        if (value == 'edit') {
-                          _showFolderEditDialog(
-                            context,
-                            vm,
-                            editingFolder: folder,
-                          );
-                        } else if (value == 'delete') {
-                          _showDeleteConfirmDialog(
-                            context,
-                            onConfirm: () {
-                              vm.deleteFolder(folder.id);
-                            },
-                          );
-                        }
-                      },
-                      itemBuilder:
-                          (BuildContext context) => [
-                            PopupMenuItem<String>(
-                              value: 'edit',
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.edit,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text('フォルダの編集'),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem<String>(
-                              value: 'delete',
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.delete,
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    '削除',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                    ),
-                  ],
+          return FolderCard(
+            folder: folder,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => LinkListScreen(folder: folder),
                 ),
-              ),
-            ),
+              );
+            },
+            onEdit: () {
+              _showFolderEditDialog(context, vm, editingFolder: folder);
+            },
+            onDelete: () {
+              _showDeleteConfirmDialog(
+                context,
+                onConfirm: () {
+                  vm.deleteFolder(folder.id);
+                },
+              );
+            },
           );
         },
       ),

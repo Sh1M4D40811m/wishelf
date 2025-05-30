@@ -4,7 +4,7 @@ import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/models/link.dart';
 import 'package:wishelf/services/storage_service.dart';
 import 'package:wishelf/widgets/folder_colors.dart';
-import 'package:wishelf/widgets/link_card.dart';
+import 'package:wishelf/widgets/card/link_card.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
