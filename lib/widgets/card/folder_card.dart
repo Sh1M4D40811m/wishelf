@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
+import 'package:wishelf/widgets/popup_menu_item_with_icon.dart';
 
 final class FolderCard extends StatelessWidget {
   final Folder folder;
@@ -60,36 +61,17 @@ final class FolderCard extends StatelessWidget {
                 },
                 itemBuilder:
                     (BuildContext context) => [
-                      PopupMenuItem<String>(
+                      PopupMenuItemWithIcon(
                         value: 'edit',
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            SizedBox(width: 8),
-                            Text('フォルダの編集'),
-                          ],
-                        ),
+                        icon: Icons.edit,
+                        text: 'フォルダの編集',
+                        type: PopupMenuItemWithIconType.normal,
                       ),
-                      PopupMenuItem<String>(
+                      PopupMenuItemWithIcon(
                         value: 'delete',
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.delete,
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              '削除',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                            ),
-                          ],
-                        ),
+                        icon: Icons.delete,
+                        text: '削除',
+                        type: PopupMenuItemWithIconType.destructive,
                       ),
                     ],
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/link.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wishelf/widgets/popup_menu_item_with_icon.dart';
 
 enum LinkCardStatus { normal, selected, preview }
 
@@ -41,8 +42,6 @@ class _LinkCardState extends State<LinkCard> {
             borderRadius: BorderRadius.circular(16),
             onTap: () async {
               final url = Uri.tryParse(widget.item.url);
-              print("Parsed URL: $url");
-              print("URL Scheme: ${url?.scheme}");
               if (url != null && await canLaunchUrl(url)) {
                 await launchUrl(url, mode: LaunchMode.externalApplication);
               } else {
@@ -160,36 +159,17 @@ class _LinkCardState extends State<LinkCard> {
       },
       itemBuilder:
           (BuildContext context) => [
-            PopupMenuItem<String>(
+            PopupMenuItemWithIcon(
               value: 'edit',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.edit,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  SizedBox(width: 8),
-                  Text('リンクの編集'),
-                ],
-              ),
+              icon: Icons.edit,
+              text: 'リンクの編集',
+              type: PopupMenuItemWithIconType.normal,
             ),
-            PopupMenuItem<String>(
+            PopupMenuItemWithIcon(
               value: 'delete',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.delete,
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    '削除',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                ],
-              ),
+              icon: Icons.delete,
+              text: '削除',
+              type: PopupMenuItemWithIconType.destructive,
             ),
           ],
     );
