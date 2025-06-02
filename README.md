@@ -1,6 +1,5 @@
 # wishelf
 欲しいものリストアプリ。購入ページなどのリンクを保存・フォルダ分けが出来るアプリです。
-<br>[Figma](https://www.figma.com/design/IdAsRjorQFdMVuAYGbS6gg/WiShelf?node-id=0-1&t=ObzpbR4jsJH0Zf7d-1)でデザインを作成しています。
 
 # Preview
 |TOP|リンク一覧|入力フォーム|
@@ -15,4 +14,5 @@
 # 技術スタック
 - Flutter/Dart
 - VSCode
-- ChatGPT/GoogleAIStudio/Copilot（技術選定・入力補助などの製造サポートに使用）
+- ChatGPT/GoogleAIStudio/Copilot ※主に製造のサポート(技術選定・入力補助など)に使用
+- [Figma](https://www.figma.com/design/IdAsRjorQFdMVuAYGbS6gg/WiShelf?node-id=0-1&t=ObzpbR4jsJH0Zf7d-1)
