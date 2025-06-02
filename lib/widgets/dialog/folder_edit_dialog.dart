@@ -4,7 +4,7 @@ import 'package:wishelf/widgets/folder_colors.dart';
 
 final class FolderEditDialog extends StatefulWidget {
   final Folder? editingFolder;
-  final void Function(Folder folder) onSubmit;
+  final Function(Folder folder) onSubmit;
 
   const FolderEditDialog({
     super.key,

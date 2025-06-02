@@ -4,8 +4,8 @@ import 'package:wishelf/views/link_edit_screen.dart';
 import 'package:wishelf/widgets/card/link_card.dart';
 import 'package:wishelf/viewmodels/link_edit_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:wishelf/widgets/dialog/delete_confirm_dialog.dart';
 import 'package:wishelf/repositories/folder_repository.dart';
+import 'package:wishelf/util/dialog_util.dart';
 
 final class LinkListScreen extends StatelessWidget {
   final Folder folder;
@@ -49,8 +49,10 @@ final class LinkListScreen extends StatelessWidget {
                         ),
                       );
                     } else if (type == LinkCardMenuType.delete) {
-                      _showDeleteConfirmDialog(
-                        context,
+                      showDeleteConfirmDialog(
+                        context: context,
+                        title: 'リンクの削除',
+                        message: '削除した場合、復元できません。\n本当に削除しますか？',
                         onConfirm: () {
                           vm.deleteLink(
                             folder.id,
@@ -84,24 +86,6 @@ final class LinkListScreen extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  void _showDeleteConfirmDialog(
-    BuildContext context, {
-    required VoidCallback onConfirm,
-  }) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return DeleteConfirmDialog(
-          title: 'リンクの削除',
-          message: '削除した場合、復元できません。\n本当に削除しますか？',
-          confirmText: '削除',
-          cancelText: 'キャンセル',
-          onConfirm: onConfirm,
-        );
-      },
     );
   }
 }
