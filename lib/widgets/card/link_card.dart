@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/link.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wishelf/widgets/popup_menu_item_with_icon.dart';
+import 'package:wishelf/widgets/popupmenu/more_vert_popup_menu.dart';
 
 enum LinkCardStatus { normal, selected, preview }
 
@@ -106,7 +106,17 @@ class _LinkCardState extends State<LinkCard> {
             ),
           ),
         ),
-        if (widget.status == LinkCardStatus.normal) _buildMoreMenu(context),
+        if (widget.status == LinkCardStatus.normal)
+          MoreVertPopupMenu(
+            editTitle: 'リンクの編集',
+            deleteTitle: '削除',
+            onEdit: () {
+              widget.onTapMenu?.call(LinkCardMenuType.edit);
+            },
+            onDelete: () {
+              widget.onTapMenu?.call(LinkCardMenuType.delete);
+            },
+          ),
       ],
     );
   }
@@ -141,37 +151,6 @@ class _LinkCardState extends State<LinkCard> {
           return const SizedBox.shrink(); // 空のWidget（表示しない）
         },
       ),
-    );
-  }
-
-  Widget _buildMoreMenu(BuildContext context) {
-    return PopupMenuButton<String>(
-      icon: Icon(
-        Icons.more_vert,
-        color: Theme.of(context).colorScheme.onSurface,
-      ),
-      onSelected: (value) {
-        if (value == 'edit') {
-          widget.onTapMenu?.call(LinkCardMenuType.edit);
-        } else if (value == 'delete') {
-          widget.onTapMenu?.call(LinkCardMenuType.delete);
-        }
-      },
-      itemBuilder:
-          (BuildContext context) => [
-            PopupMenuItemWithIcon(
-              value: 'edit',
-              icon: Icons.edit,
-              text: 'リンクの編集',
-              type: PopupMenuItemWithIconType.normal,
-            ),
-            PopupMenuItemWithIcon(
-              value: 'delete',
-              icon: Icons.delete,
-              text: '削除',
-              type: PopupMenuItemWithIconType.destructive,
-            ),
-          ],
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishelf/models/folder.dart';
-import 'package:wishelf/widgets/popup_menu_item_with_icon.dart';
+import 'package:wishelf/widgets/popupmenu/more_vert_popup_menu.dart';
 
 final class FolderCard extends StatelessWidget {
   final Folder folder;
@@ -47,33 +47,11 @@ final class FolderCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 4),
-              PopupMenuButton<String>(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                onSelected: (value) {
-                  if (value == 'edit') {
-                    onEdit();
-                  } else if (value == 'delete') {
-                    onDelete();
-                  }
-                },
-                itemBuilder:
-                    (BuildContext context) => [
-                      PopupMenuItemWithIcon(
-                        value: 'edit',
-                        icon: Icons.edit,
-                        text: 'フォルダの編集',
-                        type: PopupMenuItemWithIconType.normal,
-                      ),
-                      PopupMenuItemWithIcon(
-                        value: 'delete',
-                        icon: Icons.delete,
-                        text: '削除',
-                        type: PopupMenuItemWithIconType.destructive,
-                      ),
-                    ],
+              MoreVertPopupMenu(
+                editTitle: 'フォルダの編集',
+                deleteTitle: '削除',
+                onEdit: onEdit,
+                onDelete: onDelete,
               ),
             ],
           ),
