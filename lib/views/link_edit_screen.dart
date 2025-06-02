@@ -3,12 +3,13 @@ import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:wishelf/models/folder.dart';
 import 'package:wishelf/models/link.dart';
 import 'package:wishelf/services/storage_service.dart';
-import 'package:wishelf/widgets/folder_colors.dart';
-import 'package:wishelf/widgets/card/link_card.dart';
-import 'package:icon_decoration/icon_decoration.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wishelf/viewmodels/link_edit_view_model.dart';
+import 'package:wishelf/widgets/link_edit/folder_dropdown.dart';
+import 'package:wishelf/widgets/link_edit/link_preview_card.dart';
+import 'package:wishelf/widgets/link_edit/title_text_field.dart';
+import 'package:wishelf/widgets/link_edit/url_text_field.dart';
 
 final class LinkEditScreen extends StatefulWidget {
   final LinkItem? initialItem;
@@ -201,7 +202,9 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
 
     final vm = Provider.of<LinkEditViewModel>(context, listen: false);
     final link = LinkItem(
-      id: widget.initialItem?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      id:
+          widget.initialItem?.id ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
       url: _urlController.text.trim(),
       title: _titleController.text.trim(),
       imageUrl: _fetchedMetadata?.image,
@@ -229,11 +232,47 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildFolderDropdown(),
+            FolderDropdown(
+              folders: _folders,
+              selectedFolderId: _selectedFolderId,
+              onChanged: (value) {
+                if (mounted) {
+                  setState(() {
+                    _selectedFolderId = value;
+                  });
+                }
+              },
+            ),
             SizedBox(height: 24),
-            _buildURLTextField(),
+            UrlTextField(
+              controller: _urlController,
+              focusNode: _urlFocusNode,
+              errorText: _urlErrorText,
+              onChanged: (value) {
+                _fetchMetadata(value);
+              },
+              onClear: () {
+                _urlController.clear();
+                _fetchMetadata('');
+              },
+              onPaste: () async {
+                final data = await Clipboard.getData(Clipboard.kTextPlain);
+                if (data != null && data.text != null) {
+                  _urlController.text = data.text!;
+                  _fetchMetadata(_urlController.text.trim());
+                }
+              },
+            ),
             SizedBox(height: 24),
-            _buildTitleTextField(),
+            TitleTextField(
+              controller: _titleController,
+              focusNode: _titleFocusNode,
+              errorText: _titleErrorText,
+              onClear: () {
+                _titleController.clear();
+                _updateButtonState();
+              },
+            ),
             SizedBox(height: 24),
             if (_isFetchingMetadata) ...[
               Center(child: CircularProgressIndicator()),
@@ -243,8 +282,8 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
               ),
               SizedBox(height: 16),
             ],
-            if (_fetchedMetadata != null) ...[
-              LinkCard(
+            if (_fetchedMetadata != null)
+              LinkPreviewCard(
                 item: LinkItem(
                   id: DateTime.now().millisecondsSinceEpoch.toString(),
                   title:
@@ -255,9 +294,7 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
                   imageUrl: _fetchedMetadata?.image,
                   url: _urlController.text.trim(),
                 ),
-                status: LinkCardStatus.preview,
               ),
-            ],
             SizedBox(height: 80), // FABのためのスペース
           ],
         ),
@@ -278,114 +315,6 @@ final class _LinkEditScreenState extends State<LinkEditScreen> {
                 ? Theme.of(context).colorScheme.onPrimary
                 : Theme.of(context).colorScheme.onSecondary,
       ),
-    );
-  }
-
-  Widget _buildFolderDropdown() {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(labelText: '保存先フォルダ'),
-      value: _selectedFolderId,
-      items:
-          _folders.map((folder) {
-            return DropdownMenuItem<String>(
-              value: folder.id,
-              child: Row(
-                children: [
-                  DecoratedIcon(
-                    icon: Icon(
-                      Icons.folder,
-                      color: FolderColor.fromHex(folder.colorHex).color,
-                    ),
-                    decoration: IconDecoration(
-                      border: IconBorder(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Text(folder.title),
-                ],
-              ),
-            );
-          }).toList(),
-      onChanged: (value) {
-        if (mounted) {
-          setState(() {
-            _selectedFolderId = value;
-          });
-        }
-      },
-    );
-  }
-
-  Widget _buildURLTextField() {
-    return TextField(
-      controller: _urlController,
-      focusNode: _urlFocusNode,
-      decoration: InputDecoration(
-        labelText: 'リンクを貼り付け',
-        hintText: 'https://example.com',
-        hintStyle: TextStyle(color: Theme.of(context).hintColor),
-        errorText: _urlErrorText,
-        suffixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.paste_outlined),
-              onPressed: () async {
-                final data = await Clipboard.getData(Clipboard.kTextPlain);
-                if (data != null && data.text != null) {
-                  _urlController.text = data.text!;
-                  _fetchMetadata(_urlController.text.trim());
-                }
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.cancel_outlined),
-              onPressed: () {
-                _urlController.clear();
-                _fetchMetadata('');
-              },
-            ),
-          ],
-        ),
-      ),
-      keyboardType: TextInputType.url,
-      onChanged: (value) {
-        _fetchMetadata(value);
-      },
-    );
-  }
-
-  Widget _buildTitleTextField() {
-    return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      controller: _titleController,
-      focusNode: _titleFocusNode,
-      decoration: InputDecoration(
-        labelText: 'タイトルを編集',
-        hintText: 'リンクから自動入力されます',
-        hintStyle: TextStyle(color: Theme.of(context).hintColor),
-        suffixIcon:
-            _titleFocusNode.hasFocus
-                ? IconButton(
-                  icon: Icon(Icons.cancel_outlined),
-                  onPressed: () {
-                    _titleController.clear();
-                    _updateButtonState();
-                  },
-                )
-                : null,
-      ),
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          _titleErrorText = '必須項目です。';
-        } else {
-          _titleErrorText = null;
-        }
-        return _titleErrorText;
-      },
     );
   }
 }
